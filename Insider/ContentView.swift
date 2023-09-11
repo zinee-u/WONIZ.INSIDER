@@ -4,15 +4,7 @@
 //
 //  Created by 유수진 on 2023/09/06.
 //
-//  Keywords: Firebase
-//  Ref.
-//  - https://ios-development.tistory.com/769
-//  - https://hryang.tistory.com/32
-//  - https://makeschool.org/mediabook/oa/tracks/build-ios-apps/build-a-photo-sharing-app/uploading-photos-to-firebase/
-//  - https://fomaios.tistory.com/entry/Swift-Storage%EC%97%90%EC%84%9C-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%97%85%EB%A1%9C%EB%93%9C-%EB%B0%8F-%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C%ED%95%98%EA%B8%B0
-//  - https://velog.io/@ayb226/Flutter-%EC%98%A4%EB%A5%98-%EB%AA%A8%EC%9D%8C-FIRMessaging-Remote-Notifications-proxy-enabled-%ED%95%B4%EA%B2%B0%EB%B2%95
-//  - https://github.com/you6878/howltalk_ios_simple_version/blob/master/Guide/section_4/index.md
-//  - https://designcode.io/swiftui-advanced-handbook-imagepicker
+//  Keywords: Mandatory info., Property
 
 import SwiftUI
 import UIKit
@@ -44,15 +36,34 @@ struct ContentView_Basic: View{
     @State private var tag:Int? = nil
     var body: some View {
         NavigationStack{
-            ZStack{
+            VStack{
                 Color.black.ignoresSafeArea(.all)
+                Text("Hello, Insider!")
+                    .font(.system(size: 40))
+            }
+            VStack{
                 NavigationLink(destination: SigninPage(), tag: 1, selection: self.$tag){
                     SigninKakao()
                 }
-                Button(action: {
-                    self.tag = 1
-                }) {
-                    EmptyView()
+                NavigationLink(destination: ApplyForm(), tag: 2, selection: self.$tag){
+                    ApplyButton()
+                }
+                HStack{
+                    Color.black.ignoresSafeArea(.all)
+                    
+                    Button(action: {
+                        self.tag = 1
+                    }){
+                        EmptyView()
+                    }
+                }
+                HStack{
+                    
+                    Button(action: {
+                        self.tag = 2
+                    }){
+                        EmptyView()
+                    }
                 }
             }
         }
@@ -67,6 +78,18 @@ struct SigninKakao: View{
                 .foregroundColor(Color.purple)
                 .frame(width: 80, height: 60)
             Text("Sign-in")
+                .foregroundColor(.black)
+        }
+    }
+}
+
+struct ApplyButton: View{
+    var body: some View{
+        ZStack {
+            RoundedRectangle(cornerRadius: 20)
+                .foregroundColor(Color.purple)
+                .frame(width: 80, height: 60)
+            Text("Apply")
                 .foregroundColor(.black)
         }
     }
@@ -202,4 +225,3 @@ struct ImagePicker: UIViewControllerRepresentable {
 
     }
 }
-
