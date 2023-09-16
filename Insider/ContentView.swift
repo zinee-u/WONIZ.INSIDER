@@ -46,7 +46,7 @@ struct ContentView_Basic: View{
                     SigninKakao()
                 }
                 NavigationLink(destination: ApplyForm(), tag: 2, selection: self.$tag){
-                    ApplyButton()
+                    SignupMember()
                 }
                 HStack{
                     Color.black.ignoresSafeArea(.all)
@@ -83,13 +83,13 @@ struct SigninKakao: View{
     }
 }
 
-struct ApplyButton: View{
+struct SignupMember: View{
     var body: some View{
         ZStack {
             RoundedRectangle(cornerRadius: 20)
                 .foregroundColor(Color.purple)
                 .frame(width: 80, height: 60)
-            Text("Apply")
+            Text("Sign-up [Member]")
                 .foregroundColor(.black)
         }
     }
