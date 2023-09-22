@@ -1,5 +1,5 @@
 //
-//  ApplyFormOpt.swift
+//  AppFormOpt.swift
 //  Insider
 //
 //  Created by 유수진 on 2023/09/16.
@@ -12,7 +12,7 @@ import FirebaseFirestore
 import FirebaseAuth
 import FirebaseStorage
 
-struct ApplyFormOpt: View {
+struct AppFormOpt: View {
     @State private var tag:Int? = nil
     @State var hobby: String = ""
     @State var mbti: String = ""
@@ -121,8 +121,8 @@ struct ApplyFormOpt: View {
     }
 }
 
-struct ApplyFormOpt_Previews: PreviewProvider {
+struct AppFormOpt_Previews: PreviewProvider {
     static var previews: some View {
-        ApplyFormOpt()
+        AppFormOpt()
     }
 }

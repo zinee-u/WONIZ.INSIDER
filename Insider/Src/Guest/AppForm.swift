@@ -1,5 +1,5 @@
 //
-//  ApplyForm.swift
+//  AppForm.swift
 //  Insider
 //
 //  Created by 유수진 on 2023/09/11.
@@ -17,13 +17,14 @@ import FirebaseFirestore
 import FirebaseAuth
 import FirebaseStorage
 
-struct ApplyForm: View {
+struct AppForm: View {
     @State private var tag:Int? = nil
     @State var name: String = ""
     @State var birthday: String = ""
     @State var gender: String = ""
     @State var height: String = ""
-    @State var job: String = ""
+    @State var company: String = ""
+    @State var jobtitle: String = ""
     @State var location: String = ""
     @State var _1stNode: String = ""
     @State var isLogin: Bool = false
@@ -41,7 +42,7 @@ struct ApplyForm: View {
                     .fontWeight(.medium)
                     .frame(width: 350, alignment: .leading)
                     .padding(.bottom, 10)
-                NavigationLink(destination: ApplyFormOpt(), tag: 1, selection: self.$tag){
+                NavigationLink(destination: AppFormOpt(), tag: 1, selection: self.$tag){
                 }
             }
             Spacer()
@@ -90,7 +91,17 @@ struct ApplyForm: View {
                 .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.black, lineWidth: 2))
                 
                 HStack{
-                    TextField("직업(회사/직무): ", text: $job)
+                    TextField("회사: ", text: $company)
+                        .frame(width: 300, height: 30)
+                        .keyboardType(.namePhonePad)
+                        .autocapitalization(.none)
+                        .disableAutocorrection(false)
+                }
+                .padding()
+                .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.black, lineWidth: 2))
+                
+                HStack{
+                    TextField("직무: ", text: $jobtitle)
                         .frame(width: 300, height: 30)
                         .keyboardType(.namePhonePad)
                         .autocapitalization(.none)
@@ -121,14 +132,20 @@ struct ApplyForm: View {
                 
                 HStack{
                     Button(action:{
-                        var uid = 1
-                        let guestInfo = Database.database().reference(withPath: "guestInfo")
-                            .child(String(uid))
-//                            .childByAutoId()
-                        uid += 1
-                        let userItemRef = guestInfo.child("user")
-                        let values: [String: Any] = [ "name": name, "birthday": birthday, "gender": gender, "height": height, "job": job, "location": location, "1stnode": _1stNode]
-                        userItemRef.setValue(values)
+                        let rootRef = Database.database().reference()
+                        let hostsRef = rootRef.child("host")
+                        // hostRef = HostID
+                        let hostRef = rootRef.childByAutoId()
+                        
+                        let guestsRef = rootRef.child("guest")
+                        // guestRef = guestID
+                        let guestRef = rootRef.childByAutoId()
+                        
+                        let values: [String: Any] = ["name": name, "birthday": birthday, "gender": gender, "height": height, "job": ["company":company, "jobtitle":jobtitle], "location": location, "1stnode": _1stNode]
+                        
+                        guestRef.setValue(values)
+                        
+                        
                         self.tag = 1
                     }, label:{
                         Text("다음")
@@ -141,8 +158,8 @@ struct ApplyForm: View {
     }
 }
 
-struct ApplyForm_Previews: PreviewProvider {
+struct AppForm_Previews: PreviewProvider {
     static var previews: some View {
-        ApplyForm()
+        AppForm()
     }
 }

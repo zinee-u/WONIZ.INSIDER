@@ -45,7 +45,7 @@ struct ContentView_Basic: View{
                 NavigationLink(destination: SigninPage(), tag: 1, selection: self.$tag){
                     SigninKakao()
                 }
-                NavigationLink(destination: ApplyForm(), tag: 2, selection: self.$tag){
+                NavigationLink(destination: AppForm(), tag: 2, selection: self.$tag){
                     SignupMember()
                 }
                 HStack{
