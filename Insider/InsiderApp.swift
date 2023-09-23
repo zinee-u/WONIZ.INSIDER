@@ -4,7 +4,9 @@
 //
 //  Created by 유수진 on 2023/09/06.
 //
-//  Keywords: 
+//  Keywords: Binding
+//  Ref:
+//  - https://insubkim.tistory.com/263
 
 
 import SwiftUI
@@ -28,6 +30,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 @main
 struct InsiderApp: App {
     
+    @State private var kakaoID: Int64 = 0
+    @State private var kakaoName: String = ""
+    
     init(){
         @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
 //        FirebaseApp.configure()
@@ -39,7 +44,7 @@ struct InsiderApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationView{
-                ContentView()
+                ContentView(kakaoID: $kakaoID, kakaoName: $kakaoName)
                     .onOpenURL{ url in
                         if(AuthApi.isKakaoTalkLoginUrl(url)){
                             _ = AuthController.handleOpenUrl(url: url)

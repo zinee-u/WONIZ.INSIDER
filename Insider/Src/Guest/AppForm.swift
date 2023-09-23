@@ -4,11 +4,10 @@
 //
 //  Created by 유수진 on 2023/09/11.
 //
-//  Keywords: Mandatory info., Property
+//  Keywords: Realtime Database, Host, Guest, Member
 //  Ref.
-//  - https://jinshine.github.io/2018/05/22/Swift/6.%ED%94%84%EB%A1%9C%ED%8D%BC%ED%8B%B0(Property)/
-//  - https://sy-catbutler.tistory.com/18
-//  - https://huniroom.tistory.com/entry/SwiftUI-state-property
+//  - https://developers.kakao.com/docs/latest/ko/kakaologin/ios#req-user-info
+//  - https://eunjin3786.tistory.com/58
 
 import SwiftUI
 import Firebase
@@ -28,6 +27,8 @@ struct AppForm: View {
     @State var location: String = ""
     @State var _1stNode: String = ""
     @State var isLogin: Bool = false
+    @Binding var kakaoID: Int64
+    @Binding var kakaoName: String
     
     func isButtonValid() -> Bool {
         return name.count > 1 && birthday.count > 1 && isLogin == true
@@ -42,7 +43,8 @@ struct AppForm: View {
                     .fontWeight(.medium)
                     .frame(width: 350, alignment: .leading)
                     .padding(.bottom, 10)
-                NavigationLink(destination: AppFormOpt(), tag: 1, selection: self.$tag){
+                Spacer()
+                NavigationLink(destination: Submit(), tag: 1, selection: self.$tag){
                 }
             }
             Spacer()
@@ -133,13 +135,18 @@ struct AppForm: View {
                 HStack{
                     Button(action:{
                         let rootRef = Database.database().reference()
+                        
                         let hostsRef = rootRef.child("host")
                         // hostRef = HostID
-                        let hostRef = rootRef.childByAutoId()
+                        let hostRef = hostsRef.childByAutoId()
                         
                         let guestsRef = rootRef.child("guest")
                         // guestRef = guestID
-                        let guestRef = rootRef.childByAutoId()
+                        
+                        // ID_Nickname
+                        let kakaoUInfo = "_ID_" + String(kakaoID) + "_NAME_" + kakaoName
+                        
+                        let guestRef = guestsRef.child(kakaoUInfo)
                         
                         let values: [String: Any] = ["name": name, "birthday": birthday, "gender": gender, "height": height, "job": ["company":company, "jobtitle":jobtitle], "location": location, "1stnode": _1stNode]
                         
@@ -158,8 +165,8 @@ struct AppForm: View {
     }
 }
 
-struct AppForm_Previews: PreviewProvider {
-    static var previews: some View {
-        AppForm()
-    }
-}
+//struct AppForm_Previews: PreviewProvider {
+//    static var previews: some View {
+//        AppForm()
+//    }
+//}

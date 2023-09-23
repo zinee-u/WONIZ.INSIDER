@@ -20,6 +20,7 @@ struct AppFormOpt: View {
     @State var alcohol: String = ""
     @State var pet: String = ""
     @State var religion: String = ""
+    @Binding var kakaoID: String
     
     var body: some View {
         VStack{
@@ -99,14 +100,16 @@ struct AppFormOpt: View {
                 HStack{
                     Button(action:{
 //                        var uid = Auth.auth().currentUser?.uid
-                        var uid = 1
-                        let guestInfo = Database.database().reference(withPath: "guestInfo")
-                            .child(String(uid))
-//                            .childByAutoId()
-                        uid += 1
-                        let userItemRef = guestInfo.child("user")
+                        let rootRef = Database.database().reference()
+
+                        let hostsRef = rootRef.child("host")
+                        let hostRef = hostsRef.childByAutoId()
+                        
+                        let guestsRef = rootRef.child("guest")
+                        let guestRef = guestsRef.child(String(kakaoID))
+                        
                         let values: [String: Any] = [ "hobby": hobby, "mbti": mbti, "smoking": smoking, "alcohol": alcohol, "pet": pet, "religion": religion]
-                        userItemRef.setValue(values)
+                        guestRef.setValue(values)
                         self.tag = 2
                     }, label:{
                         Text("제출")
@@ -121,8 +124,9 @@ struct AppFormOpt: View {
     }
 }
 
-struct AppFormOpt_Previews: PreviewProvider {
-    static var previews: some View {
-        AppFormOpt()
-    }
-}
+//struct AppFormOpt_Previews: PreviewProvider {
+//    @Binding var kakaoID: String
+//    static var previews: some View {
+//        AppFormOpt()
+//    }
+//}
