@@ -25,25 +25,21 @@ import FirebaseStorage
 
 
 struct ContentView: View {
-    @Binding var kakaoID: Int64
-    @Binding var kakaoName: String
     var body: some View {
-        ContentView_Basic(kakaoID: $kakaoID, kakaoName: $kakaoName)
+        ContentView_Basic()
     }
 }
 
 ///* Preview */
-//struct ContentView_Previews: PreviewProvider{
-//    static var previews: some View{
-//        ContentView()
-//    }
-//}
+struct ContentView_Previews: PreviewProvider{
+    static var previews: some View{
+        ContentView()
+    }
+}
 
 /* 기본 화면 */
 struct ContentView_Basic: View{
     @State private var tag:Int? = nil
-    @Binding var kakaoID: Int64
-    @Binding var kakaoName: String
     
     var body: some View {
         NavigationStack{
@@ -53,12 +49,14 @@ struct ContentView_Basic: View{
                     .font(.system(size: 40))
             }
             VStack{
-                NavigationLink(destination: SigninPage(kakaoID: $kakaoID, kakaoName: $kakaoName), tag: 1, selection: self.$tag){
-                    SigninKakao()
+                NavigationLink(destination: Signin(), tag: 1, selection: self.$tag){
+                    SigninMember()
                 }
-                NavigationLink(destination: AppForm(kakaoID: $kakaoID, kakaoName: $kakaoName), tag: 2, selection: self.$tag){
-                    SignupMember()
+                
+                NavigationLink(destination: Signin(), tag: 2, selection: self.$tag){
+                    SignupGuest()
                 }
+                
                 HStack{
                     Color.black.ignoresSafeArea(.all)
                     
@@ -81,7 +79,19 @@ struct ContentView_Basic: View{
     }
 }
 
-struct SignupMember: View{
+struct SigninMember: View{
+    var body: some View{
+        ZStack {
+            RoundedRectangle(cornerRadius: 20)
+                .foregroundColor(Color.purple)
+                .frame(width: 80, height: 60)
+            Text("Sign-in")
+                .foregroundColor(.black)
+        }
+    }
+}
+
+struct SignupGuest: View{
     var body: some View{
         ZStack {
             RoundedRectangle(cornerRadius: 20)

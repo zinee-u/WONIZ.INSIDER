@@ -9,6 +9,7 @@
 //  - https://insubkim.tistory.com/263
 //  - https://developers.kakao.com/docs/latest/ko/kakaologin/ios#req-user-info
 //  - https://developers.kakao.com/tool/resource/login
+//  - https://pororious.tistory.com/305
 
 import SwiftUI
 import Firebase
@@ -19,39 +20,39 @@ import FirebaseStorage
 import KakaoSDKAuth
 import KakaoSDKUser
 
+
 struct Signin: View {
+    @State var kakaoID : Int64 = -1
+    @State var kakaoName : String = "None"
+    @State var isLogin : Bool = false
+    @State private var tag:Int? = nil
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        
+        SigninKakao(kakaoID: $kakaoID, kakaoName: $kakaoName, isLogin: $isLogin)
+        VStack{
+            NavigationLink(destination: AppForm(kakaoID: $kakaoID, kakaoName: $kakaoName, isLogin: $isLogin), isActive: $isLogin){
+                    EmptyView()
+            }
+        }
+        
     }
 }
 
 struct Signin_Previews: PreviewProvider {
+    @Binding var tag : Int
     static var previews: some View {
         Signin()
     }
 }
 
-/* ZStack.Sign-in 화면 */
-struct SigninKakao: View{
-    var body: some View{
-        ZStack {
-            RoundedRectangle(cornerRadius: 20)
-                .foregroundColor(Color.purple)
-                .frame(width: 80, height: 60)
-            Text("Sign-in")
-                .foregroundColor(.black)
-        }
-    }
-}
 
-/* VStack.Kakao 화면 */
-struct SigninPage: View{
-    
+struct SigninKakao: View{
+    @Binding var kakaoID : Int64
+    @Binding var kakaoName : String
+    @Binding var isLogin : Bool
     @State private var image = UIImage()
     @State private var showSheet = false
-    @Binding var kakaoID: Int64
-    @Binding var kakaoName: String
-    
     func loginKakao(){
         if(UserApi.isKakaoTalkLoginAvailable()) {
             UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
@@ -67,6 +68,7 @@ struct SigninPage: View{
             }
             else {
                 print("me() succeeded!")
+                isLogin = true
                 _ = user
                 /* 사용자 정보는 User 클래스 객체로 전달된다.
                  회원번호 값을 조회하려면 user.id,
@@ -75,11 +77,23 @@ struct SigninPage: View{
 //                kakaoID = String(user?.kakaoAccount?.profile?.nickname ?? "none")
                 kakaoID = user?.id ?? 0
                 kakaoName = String(user?.kakaoAccount?.profile?.nickname ?? "None")
+                print("\(isLogin)")
             }
         }
     }
     
-    var body: some View {
+    
+    /* ZStack.Sign-in 화면 */
+    var body: some View{
+//        ZStack {
+//            RoundedRectangle(cornerRadius: 20)
+//                .foregroundColor(Color.purple)
+//                .frame(width: 80, height: 60)
+//            Text("Sign-in")
+//                .foregroundColor(.black)
+//        }
+        
+        /* VStack.Kakao 화면 */
         VStack {
             Text("KakaoTalk")
                 .foregroundColor(.purple)
@@ -87,7 +101,7 @@ struct SigninPage: View{
             
             /* 신규 회원 Kakao 로그인 */
             Button(action: {
-                SigninPage(kakaoID: $kakaoID, kakaoName: $kakaoName).loginKakao()
+                loginKakao()
             }, label: {
                 Text("Sign Up")
                     .foregroundColor(.purple)
@@ -96,7 +110,7 @@ struct SigninPage: View{
             
             /* 기존 회원 Kakao 로그인 */
             Button(action:{
-                SigninPage(kakaoID: $kakaoID, kakaoName: $kakaoName).loginKakao()
+                loginKakao()
                 print(kakaoID)
             }, label: {
                 Text("Sign In")
@@ -140,7 +154,6 @@ struct SigninPage: View{
                     .background(Color.black)
             })
         }
-        /* 글자 영역의 배경색 */
         .background(Color.black)
     }
 }

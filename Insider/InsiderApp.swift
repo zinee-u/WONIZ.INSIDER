@@ -30,8 +30,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 @main
 struct InsiderApp: App {
     
-    @State private var kakaoID: Int64 = 0
-    @State private var kakaoName: String = ""
+//    @State private var kakaoID: Int64 = 0
+//    @State private var kakaoName: String = ""
     
     init(){
         @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
@@ -44,7 +44,7 @@ struct InsiderApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationView{
-                ContentView(kakaoID: $kakaoID, kakaoName: $kakaoName)
+                ContentView()
                     .onOpenURL{ url in
                         if(AuthApi.isKakaoTalkLoginUrl(url)){
                             _ = AuthController.handleOpenUrl(url: url)
