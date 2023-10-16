@@ -40,56 +40,48 @@ struct ContentView_Previews: PreviewProvider{
 /* 기본 화면 */
 struct ContentView_Basic: View{
     @State private var tag:Int? = nil
+    @State var kakaoID : Int64 = -1
+    @State var kakaoName : String = "None"
+    @State var isLogin : Bool = false
     
     var body: some View {
         NavigationStack{
             VStack{
-                Color.black.ignoresSafeArea(.all)
+                SwiftUI.Color.black.ignoresSafeArea(.all)
                 Text("Hello, Insider!")
                     .font(.system(size: 40))
             }
         
             VStack{
-                NavigationLink(destination: Signin(), tag: 1, selection: self.$tag){
-                    SigninMember()
-                }
-                
+//                NavigationLink(destination: Signin(kakaoID: $kakaoID, kakaoName: $kakaoName, isLogin: $isLogin), tag: 1, selection: self.$tag){
+//                    SigninMember()
+//                }
+
+                Signin(kakaoID: $kakaoID, kakaoName: $kakaoName, isLogin: $isLogin)
+
                 NavigationLink(destination: Signup(), tag: 2, selection: self.$tag){
-                    SignupGuest()
+                        SignupGuest()
                 }
+            }
                 
-                HStack{
-                    Color.black.ignoresSafeArea(.all)
+            HStack{
+                SwiftUI.Color.black.ignoresSafeArea(.all)
                     
-                    Button(action: {
+                Button(action: {
                         self.tag = 1
-                    }){
-                        EmptyView()
-                    }
+                }){
+                    EmptyView()
                 }
-                HStack{
-                    
-                    Button(action: {
-                        self.tag = 2
-                    }){
-                        EmptyView()
-                    }
+            }
+            HStack{
+                Button(action: {
+                    self.tag = 2
+                }){
+                    EmptyView()
                 }
             }
         }
         Color.black.ignoresSafeArea(.all)
-    }
-}
-
-struct SigninMember: View{
-    var body: some View{
-        ZStack {
-            RoundedRectangle(cornerRadius: 20)
-                .foregroundColor(Color.purple)
-                .frame(width: 80, height: 60)
-            Text("Sign-in")
-                .foregroundColor(.black)
-        }
     }
 }
 

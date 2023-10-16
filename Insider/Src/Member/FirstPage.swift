@@ -24,15 +24,15 @@ struct FirstPage: View {
         
         NavigationView{
             VStack{
+                Text("Hi, \(kakaoName)!")
                 NavigationLink(destination: MyPage(kakaoID: $kakaoID, kakaoName: $kakaoName, isLogin: $isLogin), tag: 1, selection: self.$tag){
-                    Text("MyPage")
-                        .foregroundColor(.purple)
-                        .background(Color.black)
+                        btnMyPage()
                 }
-                .navigationTitle("Hi, \(kakaoName)!")
             }
-            .foregroundColor(.black)
         }
+        .navigationTitle("Welcome")
+        .foregroundColor(.black)
+        .navigationBarBackButtonHidden()
     }
 }
 
@@ -41,3 +41,15 @@ struct FirstPage: View {
 //        FirstPage()
 //    }
 //}
+
+struct btnMyPage: View{
+    var body: some View{
+        ZStack {
+            RoundedRectangle(cornerRadius: 20)
+                .foregroundColor(Color.purple)
+                .frame(width: 100, height: 60)
+            Text("MyPage")
+                .foregroundColor(.black)
+        }
+    }
+}

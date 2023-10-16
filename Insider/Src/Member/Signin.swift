@@ -24,33 +24,34 @@ import KakaoSDKUser
 
 
 struct Signin: View {
-    @State var kakaoID : Int64 = -1
-    @State var kakaoName : String = "None"
-    @State var isLogin : Bool = false
+    @Binding var kakaoID : Int64
+    @Binding var kakaoName : String
+    @Binding var isLogin : Bool
     @State private var tag:Int? = nil
     
     var body: some View {
         NavigationView{
-            if(isLogin == true){
-                VStack{
+            VStack{
+                if(isLogin == true){
                     NavigationLink(destination:FirstPage(kakaoID: $kakaoID, kakaoName: $kakaoName, isLogin: $isLogin), isActive: $isLogin){
                         btnLogin()
                     }
-                }
-            } else {
-                VStack{
+                } else {
+                    
                     SigninKakaoMem(kakaoID: $kakaoID, kakaoName: $kakaoName, isLogin: $isLogin)
-              }
+                }
             }
+            Color.black.ignoresSafeArea(.all)
+                .navigationBarBackButtonHidden()
         }
-        Color.black.ignoresSafeArea(.all)
     }
 }
 
 struct Signin_Previews: PreviewProvider {
     @Binding var tag : Int
     static var previews: some View {
-        Signin()
+//        Signin(kakaoID: String, kakaoName: <#String#>, isLogin: <#Bool#>)
+        EmptyView()
     }
 }
 
@@ -95,7 +96,7 @@ struct SigninKakaoMem: View{
     }
     
     var body: some View{
-        ZStack{
+        VStack{
             /* 기존 회원 Kakao 로그인 */
             Button(action:{
                 if(isLogin) {
@@ -110,9 +111,7 @@ struct SigninKakaoMem: View{
                         .foregroundColor(.purple)
                         .background(Color.black)
                 } else {
-                    Text("Sign In")
-                        .foregroundColor(.purple)
-                        .background(Color.black)
+                    SigninMember()
                 }
                     
             })
@@ -128,6 +127,18 @@ struct btnLogin: View{
                 .foregroundColor(Color.purple)
                 .frame(width: 100, height: 60)
             Text("LoginSIDER")
+                .foregroundColor(.black)
+        }
+    }
+}
+
+struct SigninMember: View{
+    var body: some View{
+        ZStack {
+            RoundedRectangle(cornerRadius: 20)
+                .foregroundColor(Color.purple)
+                .frame(width: 80, height: 60)
+            Text("Sign-in")
                 .foregroundColor(.black)
         }
     }
