@@ -19,7 +19,7 @@ class getMemTree: ObservableObject{
     private var ref = Database.database().reference()
     
     func getChildren(kID: Binding<Int64>) {
-        ref.child("guest").child("\(kID)").observeSingleEvent(of: .value, with: { snapshot in
+        ref.child("guest").observeSingleEvent(of: .value, with: { snapshot in
             // memInfo
             self.childeren = snapshot.children.map{ snap in
                 (snap as AnyObject).value
@@ -73,17 +73,21 @@ struct MyPage: View {
         /* 내 정보 */
         VStack{
             /* 내 사진 */
-            HStack{
+            VStack{
                 Image(uiImage: default_image!)
                     .resizable()
+                    .frame(width:100, height: 100)
                     .scaledToFill()
-                    .frame(width: 50)
-                    .clipped()
             }
-            HStack{
+            VStack{
                 /* 내 이름 */
                 ForEach(memTree.childeren, id: \.self){ child in
-                    Text("\(child)")
+                    if(child == String(kakaoID)){
+                        VStack{
+                            Text("\(child)")
+                        }
+                    }
+                    
                 }
             }
         }
