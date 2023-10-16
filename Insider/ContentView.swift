@@ -48,6 +48,7 @@ struct ContentView_Basic: View{
                 Text("Hello, Insider!")
                     .font(.system(size: 40))
             }
+        
             VStack{
                 NavigationLink(destination: Signin(), tag: 1, selection: self.$tag){
                     SigninMember()
@@ -76,6 +77,7 @@ struct ContentView_Basic: View{
                 }
             }
         }
+        Color.black.ignoresSafeArea(.all)
     }
 }
 

@@ -21,20 +21,18 @@ struct FirstPage: View {
     @Binding var isLogin: Bool
     
     var body: some View {
-        VStack{
-            Text("Hello \(kakaoName)")
-        }
         
-        VStack{
-            Button(action:{
-                EmptyView()
-            }, label:{
-                Text("MyPage")
-                    .foregroundColor(.purple)
-                    .background(Color.black)
-            })
+        NavigationView{
+            VStack{
+                NavigationLink(destination: MyPage(kakaoID: $kakaoID, kakaoName: $kakaoName, isLogin: $isLogin), tag: 1, selection: self.$tag){
+                    Text("MyPage")
+                        .foregroundColor(.purple)
+                        .background(Color.black)
+                }
+                .navigationTitle("Hi, \(kakaoName)!")
+            }
+            .foregroundColor(.black)
         }
-        
     }
 }
 

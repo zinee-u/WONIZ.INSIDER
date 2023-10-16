@@ -4,12 +4,14 @@
 //
 //  Created by 유수진 on 2023/09/23.
 //
-//  Keywords: Binding, UserInfo
+//  Keywords: Binding, UserInfo, NavigationView/Stack
 //  Ref.:
 //  - https://insubkim.tistory.com/263
 //  - https://developers.kakao.com/docs/latest/ko/kakaologin/ios#req-user-info
 //  - https://developers.kakao.com/tool/resource/login
 //  - https://pororious.tistory.com/305
+//  - https://velog.io/@niro/iOS-SwiftUI-NavigationStack-%EC%95%8C%EC%95%84%EB%B3%B4%EA%B8%B0-in-WWDC22
+//  - https://www.hohyeonmoon.com/blog/swiftui-tutorial-navigation/
 
 import SwiftUI
 import Firebase
@@ -28,14 +30,20 @@ struct Signin: View {
     @State private var tag:Int? = nil
     
     var body: some View {
-        
-        SigninKakaoMem(kakaoID: $kakaoID, kakaoName: $kakaoName, isLogin: $isLogin)
-        VStack{
-            NavigationLink(destination: FirstPage(kakaoID: $kakaoID, kakaoName: $kakaoName, isLogin: $isLogin), isActive: $isLogin){
-                    EmptyView()
+        NavigationView{
+            if(isLogin == true){
+                VStack{
+                    NavigationLink(destination:FirstPage(kakaoID: $kakaoID, kakaoName: $kakaoName, isLogin: $isLogin), isActive: $isLogin){
+                        btnLogin()
+                    }
+                }
+            } else {
+                VStack{
+                    SigninKakaoMem(kakaoID: $kakaoID, kakaoName: $kakaoName, isLogin: $isLogin)
+              }
             }
         }
-        
+        Color.black.ignoresSafeArea(.all)
     }
 }
 
@@ -48,6 +56,7 @@ struct Signin_Previews: PreviewProvider {
 
 
 struct SigninKakaoMem: View{
+    @State private var tag:Int? = nil
     @Binding var kakaoID : Int64
     @Binding var kakaoName : String
     @Binding var isLogin : Bool
@@ -68,7 +77,6 @@ struct SigninKakaoMem: View{
             }
             else {
                 print("me() succeeded!")
-                isLogin = true
                 _ = user
                 /* 사용자 정보는 User 클래스 객체로 전달된다.
                  회원번호 값을 조회하려면 user.id,
@@ -76,72 +84,51 @@ struct SigninKakaoMem: View{
                  이메일은 user.kakaoAccount.email과 같이 접근할 수 있다. */
                 kakaoID = user?.id ?? 0
                 kakaoName = String(user?.kakaoAccount?.profile?.nickname ?? "None")
+                if(kakaoID != -1 && kakaoName != "None"){
+                    isLogin = true
+                } else {
+                    isLogin = false
+                }
                 print("\(isLogin)")
             }
         }
     }
     
-    
-    /* ZStack.Sign-in 화면 */
     var body: some View{
-        
-        /* VStack.Kakao 화면 */
-        VStack {
-            Text("KakaoTalk")
-                .foregroundColor(.purple)
-            Color.black.ignoresSafeArea(.all)
-            
-            
+        ZStack{
             /* 기존 회원 Kakao 로그인 */
             Button(action:{
                 if(isLogin) {
                     print("Already Sign-in")
-                    print(kakaoID)
+                    print("\(isLogin)")
                 } else {
                     loginKakao()
                 }
             }, label: {
-                Text("Sign In")
-                    .foregroundColor(.purple)
-                    .background(Color.black)
-            })
-            
-            /* 사진 선택 및 등록 */
-            Button(action: {
-                self.showSheet.toggle()
-                
-            }, label: {
-                Text("Select Pic.")
-                    .foregroundColor(.purple)
-                    .background(Color.black)
-            })
-            .sheet(isPresented: $showSheet) {
-                ImagePicker(sourceType: .photoLibrary, selectedImage: self.$image)
-            }
-            
-            Button(action: {
-                let default_image = UIImage(named: "Default_Img")
-                let d_image = default_image?.jpegData(compressionQuality: 0.5)
-                let u_image = image.jpegData(compressionQuality: 0.5)
-                let data = (u_image ?? d_image)!
-                let storage = Storage.storage()
-                let filePath = "Users_Pics/user1"
-                let metaData = StorageMetadata()
-                metaData.contentType = "image/png"
-                storage.reference().child(filePath).putData(data, metadata: metaData){
-                     (metaData,error) in if let error = error {
-                         print(error.localizedDescription)
-                         return
-                     } else {
-                         print("Succeeded!")
-                     }
+                if(isLogin) {
+                    Text("MyPage")
+                        .foregroundColor(.purple)
+                        .background(Color.black)
+                } else {
+                    Text("Sign In")
+                        .foregroundColor(.purple)
+                        .background(Color.black)
                 }
-            }, label: {
-                Text("Upload Pic.")
-                    .foregroundColor(.purple)
-                    .background(Color.black)
+                    
             })
         }
-        .background(Color.black)
+    }
+}
+
+
+struct btnLogin: View{
+    var body: some View{
+        ZStack {
+            RoundedRectangle(cornerRadius: 20)
+                .foregroundColor(Color.purple)
+                .frame(width: 100, height: 60)
+            Text("LoginSIDER")
+                .foregroundColor(.black)
+        }
     }
 }
