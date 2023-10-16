@@ -53,7 +53,7 @@ struct ContentView_Basic: View{
                     SigninMember()
                 }
                 
-                NavigationLink(destination: Signin(), tag: 2, selection: self.$tag){
+                NavigationLink(destination: Signup(), tag: 2, selection: self.$tag){
                     SignupGuest()
                 }
                 
